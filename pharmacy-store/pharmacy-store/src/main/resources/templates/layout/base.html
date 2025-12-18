@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title ?: 'PharmaCare Pro'}">PharmaCare Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet" th:if="${page == 'dashboard'}">
+    <link th:href="@{/css/forms.css}" rel="stylesheet" th:if="${page == 'form'}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" th:replace="layout/navbar :: navbar"></nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Alert Messages -->
+        <div th:if="${successMessage}" class="alert alert-success fade-in">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${successMessage}"></span>
+        </div>
+        
+        <div th:if="${errorMessage}" class="alert alert-danger fade-in">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- Page Content -->
+        <div th:block th:fragment="content">
+            <!-- Content will be replaced by extending templates -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 PharmaCare Pro - Modern Pharmacy Management System</p>
+            <p>Built with Spring Boot, Hibernate & Modern Web Technologies</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/dashboard.js}" th:if="${page == 'dashboard'}"></script>
+    <script th:src="@{/js/sales.js}" th:if="${page == 'sales'}"></script>
+</body>
+</html>

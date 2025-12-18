@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+
+    <title>Medicine List - PharmaCare Pro</title>
+
+
+    <div th:fragment="content">
+        <!-- Page Header -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h1 class="card-title">
+                    <i class="fas fa-capsules"></i>
+                    Medicine Inventory
+                    <span class="badge info" th:text="${#lists.size(medicines) ?: 0}" style="margin-left: 1rem;">0</span>
+                </h1>
+            </div>
+        </div>
+
+        <!-- Search and Filter Bar -->
+        <div class="search-bar fade-in" style="animation-delay: 0.1s;">
+            <form th:action="@{/medicines}" method="get" style="display: flex; gap: 1rem; align-items: center; width: 100%;">
+                <input type="text" name="search" th:value="${search}" 
+                       class="search-input" 
+                       placeholder="Search medicines by name, manufacturer, or category..."
+                       style="flex: 1;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                    Search
+                </button>
+            </form>
+            <a th:href="@{/medicines/add}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Add New Medicine
+            </a>
+        </div>
+
+        <!-- Medicine Grid -->
+        <div class="medicine-grid fade-in" style="animation-delay: 0.3s;">
+            <div th:each="medicine : ${medicines}" class="medicine-card">
+                <div class="medicine-card-header">
+                    <div class="medicine-name" th:text="${medicine.name}">Medicine Name</div>
+                    <div class="medicine-manufacturer" th:text="${medicine.manufacturer}">Manufacturer</div>
+                </div>
+                <div class="medicine-card-body">
+                    <div class="medicine-info">
+                        <div class="info-item">
+                            <div class="info-label">Price</div>
+                            <div class="info-value price-value" th:text="'₹' + ${#numbers.formatDecimal(medicine.price, 0, 2)}">₹0.00</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Stock</div>
+                            <div class="info-value stock-value" 
+                                 th:classappend="${medicine.stockQuantity <= 10} ? 'low' : ''"
+                                 th:text="${medicine.stockQuantity}">0</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <span class="badge info" th:text="${medicine.category}" th:if="${medicine.category}">Category</span>
+                        <span th:class="${medicine.stockQuantity > 10} ? 'badge success' : (${medicine.stockQuantity > 0} ? 'badge warning' : 'badge danger')"
+                              th:text="${medicine.stockQuantity > 10} ? 'Available' : (${medicine.stockQuantity > 0} ? 'Low Stock' : 'Out of Stock')">
+                            Status
+                        </span>
+                        <span th:if="${medicine.prescriptionRequired}" class="badge danger">Prescription</span>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <a th:href="@{/medicines/view/{id}(id=${medicine.id})}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye"></i>
+                            View
+                        </a>
+                        <a th:href="@{/medicines/edit/{id}(id=${medicine.id})}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i>
+                            Edit
+                        </a>
+                        <button class="btn btn-success btn-sm" th:onclick="'processSale(' + ${medicine.id} + ')'">
+                            <i class="fas fa-shopping-cart"></i>
+                            Sell
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Empty State -->
+            <div th:if="${medicines == null or #lists.isEmpty(medicines)}" 
+                 style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);">
+                <i class="fas fa-capsules" style="font-size: 4rem; margin-bottom: 1rem; display: block;"></i>
+                <h3>No medicines found</h3>
+                <p th:if="${search}">No medicines match your search criteria.</p>
+                <p th:unless="${search}">Start by adding your first medicine to the inventory.</p>
+                <a th:href="@{/medicines/add}" class="btn btn-primary" style="margin-top: 1rem;">
+                    <i class="fas fa-plus"></i>
+                    Add First Medicine
+                </a>
+            </div>
+        </div>
+
+        <!-- Pagination (if implemented) -->
+        <div th:if="${totalPages != null and totalPages > 1}" class="pagination fade-in" style="animation-delay: 0.4s;">
+            <a th:if="${currentPage > 0}" 
+               th:href="@{/medicines(page=${currentPage - 1}, search=${search})}" 
+               class="btn">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            
+            <span th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
+                <a th:href="@{/medicines(page=${pageNum}, search=${search})}" 
+                   th:class="${pageNum == currentPage} ? 'btn active' : 'btn'"
+                   th:text="${pageNum + 1}">1</a>
+            </span>
+            
+            <a th:if="${currentPage < totalPages - 1}" 
+               th:href="@{/medicines(page=${currentPage + 1}, search=${search})}" 
+               class="btn">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>

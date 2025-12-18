@@ -1,0 +1,50 @@
+<nav class="navbar" xmlns:th="http://www.thymeleaf.org" th:fragment="navbar">
+    <div class="nav-container">
+        <a th:href="@{/}" class="nav-brand">
+            <i class="fas fa-pills"></i>
+            PharmaCare Pro
+        </a>
+        <ul class="nav-links">
+            <li>
+                <a th:href="@{/}" 
+                   th:classappend="${page == 'dashboard'} ? 'active' : ''" 
+                   class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/medicines}" 
+                   th:classappend="${page == 'medicines'} ? 'active' : ''" 
+                   class="nav-link">
+                    <i class="fas fa-capsules"></i> Medicines
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/stock}" 
+                   th:classappend="${page == 'stock'} ? 'active' : ''" 
+                   class="nav-link">
+                    <i class="fas fa-boxes"></i> Stock
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/sales}" 
+                   th:classappend="${page == 'sales'} ? 'active' : ''" 
+                   class="nav-link">
+                    <i class="fas fa-cash-register"></i> Sales
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/reports}" 
+                   th:classappend="${page == 'reports'} ? 'active' : ''" 
+                   class="nav-link">
+                    <i class="fas fa-chart-line"></i> Reports
+                </a>
+            </li>
+        </ul>
+        
+        <!-- Mobile menu button -->
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>

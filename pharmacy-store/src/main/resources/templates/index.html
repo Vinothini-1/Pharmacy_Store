@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{layout :: layout(title=~{::title}, content=~{::div.dashboard-content})}">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+<div class="dashboard-content">
+    <h1 class="mb-4">Dashboard Overview</h1>
+
+    <div th:if="${lowStockCount > 0}" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        **Alert:** There are <span th:text="${lowStockCount}">12</span> medicines with dangerously low stock! 
+        <a th:href="@{/stock}" class="alert-link">Manage Stock Now</a>
+    </div>
+    
+    <div th:if="${expiringCount > 0}" class="alert alert-warning" role="alert">
+        <i class="bi bi-calendar-week me-2"></i>
+        **Warning:** <span th:text="${expiringCount}">5</span> medicines are expiring in the next 30 days. 
+        <a th:href="@{/expiry}" class="alert-link">Check Expiry Dates</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-capsule me-2"></i> Total Medicines</h5>
+                    <p class="card-text fs-3" th:text="${totalMedicines}">350</p>
+                    <a th:href="@{/medicines}" class="text-white small">View All &rarr;</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-white bg-success shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-box-seam me-2"></i> Total Stock Units</h5>
+                    <p class="card-text fs-3" th:text="${totalStockQuantity}">15,800</p>
+                    <a th:href="@{/stock}" class="text-white small">Manage Stock &rarr;</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-white bg-info shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-currency-dollar me-2"></i> Inventory Value</h5>
+                    <p class="card-text fs-3" th:text="${'R' + #numbers.formatDecimal(inventoryValue, 0, 'COMMA', 2, 'POINT')}">R1,250,000.00</p>
+                    <a th:href="@{/reports}" class="text-white small">Reports & Analytics &rarr;</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-white bg-secondary shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-graph-up me-2"></i> Today's Sales</h5>
+                    <p class="card-text fs-3" th:text="${#numbers.formatDecimal(todaysSales, 0, 'COMMA', 2, 'POINT')}">R5,540.00</p>
+                    <a th:href="@{/sales}" class="text-white small">Process Sales &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <hr class="my-5">
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Recent Sales Activity</h3>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Sale #1001
+                    <span class="badge bg-success">R250.00</span>
+                </li>
+                </ul>
+        </div>
+        <div class="col-md-6">
+            <h3>Top Categories</h3>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Pain Relief
+                    <span class="badge bg-primary rounded-pill">30%</span>
+                </li>
+                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Antibiotics
+                    <span class="badge bg-primary rounded-pill">20%</span>
+                </li>
+                </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
